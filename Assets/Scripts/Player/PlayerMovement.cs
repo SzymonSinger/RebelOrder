@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveVelocity;
     private Vector3 forward, right;
 
-    // prosty movement, mo¿na by dodaæ jakieœ velocity malej¹ce z czasem ¿eby nie zatrzymywa³ siê od razu
+    // prosty movement, moï¿½na by dodaï¿½ jakieï¿½ velocity malejï¿½ce z czasem ï¿½eby nie zatrzymywaï¿½ siï¿½ od razu
 
     void Start()
     {
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         moveInput.Normalize();
 
         moveVelocity = (forward * moveInput.z + right * moveInput.x) * movementSpeed;
+        
     }
 
     void FixedUpdate()

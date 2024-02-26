@@ -1,0 +1,5 @@
+Prefab składa się z rodzica "JumpZone" i dziecka "Jump Destination"
+
+JumpZone należy ustawić w miejscu gdzie chcesz aby gracz był w stanie rozpocząć skok a Jump Destination w miejscu gdzie ma skok zakończyć.
+
+Możesz zmienić wysokość i prędkość skoku aby dopasować ją do własnych upodobań.

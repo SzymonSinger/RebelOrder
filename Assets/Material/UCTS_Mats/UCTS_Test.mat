@@ -13,7 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _EMISSIVE_SIMPLE
-  - _OUTLINE_POS
+  - _OUTLINE_NML
   m_InvalidKeywords:
   - _
   m_LightmapFlags: 4
@@ -150,7 +150,7 @@ Material:
     - _LightDirection_MaskOn: 1
     - _MatCap: 1
     - _Nearest_Distance: 0.5
-    - _OUTLINE: 1
+    - _OUTLINE: 0
     - _Offset_X_Axis_BLD: -0.05
     - _Offset_Y_Axis_BLD: 0.09
     - _Offset_Z: 0

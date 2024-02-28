@@ -18,26 +18,34 @@ public class EnemyAi : MonoBehaviour
     private bool alreadyAttacked;
 
     public float sightRange, attackRange;
+    [Range(0f, 360f)]
+    public float sightAngle;
     public bool playerInSightRange, playerInAttackRange;
 
-    private HealthSystem playerHealthSystem;
+    private VitalStatsHandler playerHealthSystem;
 
     private void Awake()
     {
         player = GameObject.Find("Player").transform;
-        playerHealthSystem = GameObject.Find("PlayerHealthSystem").GetComponent<HealthSystem>();
+        playerHealthSystem = GameObject.Find("VitalStatsHandler").GetComponent<VitalStatsHandler>();
         agent = GetComponent<NavMeshAgent>();
     }
 
     private void FixedUpdate()
     {
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        bool playerInDistanceForSight = Vector3.Distance(transform.position, player.position) <= sightRange;
+        bool playerInDistanceForAttack = Vector3.Distance(transform.position, player.position) <= attackRange;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        playerInSightRange = playerInDistanceForSight && angleToPlayer <= sightAngle / 2;
+        playerInAttackRange = playerInDistanceForAttack;
 
         if (!playerInSightRange && !playerInAttackRange) Patrol();
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
         if (playerInAttackRange && playerInSightRange) AttackPlayer();
-        
+
     }
 
     private void Patrol()
@@ -75,7 +83,6 @@ public class EnemyAi : MonoBehaviour
         if(!alreadyAttacked)
         {
             // Tutaj dodaæ wykonanie ataku, mo¿e jakiœ generyk albo po prostu daæ 2 typy range i combat czy coœ
-            Debug.Log("Player is attacked");
             playerHealthSystem.TakeDamage(5);
 
             alreadyAttacked = true;
@@ -93,7 +100,28 @@ public class EnemyAi : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
+
+        float totalFOV = sightAngle;
+        float rayRange = sightRange;
+        float halfFOV = totalFOV / 2.0f;
+        Quaternion leftRayRotation = Quaternion.AngleAxis(-halfFOV, Vector3.up);
+        Quaternion rightRayRotation = Quaternion.AngleAxis(halfFOV, Vector3.up);
+
+        Vector3 leftRayDirection = leftRayRotation * transform.forward;
+        Vector3 rightRayDirection = rightRayRotation * transform.forward;
+
+        Gizmos.DrawRay(transform.position, leftRayDirection * rayRange);
+        Gizmos.DrawRay(transform.position, rightRayDirection * rayRange);
+
+        int steps = 10;
+        for (int i = 0; i <= steps; i++)
+        {
+            Quaternion rotation = Quaternion.AngleAxis(-halfFOV + (totalFOV / steps) * i, Vector3.up);
+            Vector3 direction = rotation * transform.forward;
+            Gizmos.DrawRay(transform.position, direction * rayRange);
+        }
     }
+
 }

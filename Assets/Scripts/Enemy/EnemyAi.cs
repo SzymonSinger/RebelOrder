@@ -22,12 +22,12 @@ public class EnemyAi : MonoBehaviour
     public float sightAngle;
     public bool playerInSightRange, playerInAttackRange;
 
-    private VitalStatsHandler playerHealthSystem;
+    private VitalStatsHandler vitalStatsHandler;
 
     private void Awake()
     {
         player = GameObject.Find("Player").transform;
-        playerHealthSystem = GameObject.Find("VitalStatsHandler").GetComponent<VitalStatsHandler>();
+        vitalStatsHandler = GameObject.Find("VitalStatsHandler").GetComponent<VitalStatsHandler>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -83,7 +83,7 @@ public class EnemyAi : MonoBehaviour
         if(!alreadyAttacked)
         {
             // Tutaj dodaæ wykonanie ataku, mo¿e jakiœ generyk albo po prostu daæ 2 typy range i combat czy coœ
-            playerHealthSystem.TakeDamage(5);
+            vitalStatsHandler.TakeDamage(5);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);

@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isSprinting = false;
 
     public VitalStatsHandler vitalStatsHandler;
+    public Animator animator;
 
     void Start()
     {
@@ -38,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
 
         float currentSpeed = isSprinting ? movementSpeed * sprintMultiplier : movementSpeed;
         moveVelocity = (forward * moveInput.z + right * moveInput.x) * currentSpeed;
+
+        animator.SetBool("IsWalking", moveInput.x != 0 || moveInput.z != 0);
     }
 
     void FixedUpdate()
@@ -58,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         if (directionToLook != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(directionToLook, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 1.1f * Time.deltaTime * 100);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, movementSpeed * Time.deltaTime * 100);
         }
     }
 
@@ -75,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
             if (directionToLook != Vector3.zero)
             {
                 Quaternion toRotation = Quaternion.LookRotation(directionToLook, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 1.1f * Time.deltaTime * 100);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, movementSpeed * Time.deltaTime * 100);
             }
         }
     }
@@ -98,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
             vitalStatsHandler.isUsingStamina = false;
             isSprinting = false;
         }
+        animator.SetBool("IsSprinting", isSprinting);
     }
 }
 
